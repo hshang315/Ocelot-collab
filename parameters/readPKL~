@@ -1,0 +1,7 @@
+import pickle
+
+file='anl_hyperparams.pkl'
+f=open(file,'rb')
+data=pickle.load(f)
+print(data)
+f.close()

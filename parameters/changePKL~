@@ -1,0 +1,40 @@
+#!/bin/sh  
+# \
+exec oagtclsh "$0" "$@"
+
+set auto_path [linsert $auto_path 0  /usr/local/oag/apps/lib/$env(HOST_ARCH)]
+set auto_path [linsert $auto_path 0 /usr/local/oag/lib_patch/$env(HOST_ARCH)]
+
+APSStandardSetup
+set args $argv
+set date 1026
+set nosteering 0
+set kernel RBF
+set help 0
+APSParseArguments {date nosteering kernel help}
+
+if $help {
+    puts "changePKL -date {1014 | 1026 | 1014_1026} -kernel {RBF | matern32 | matern52} -nosteering {1 | 0}"
+    exit
+}
+#date formate for should 1014, 1026 or 1014_1026
+#kernel should be RBF, matern32, or matern56
+
+if [regexp "gaussina" $kernel] {
+    if $nosteering {
+        set file guassian_fit_sqrt2_nosteering.pkl
+    } else {
+        set file guassian_fit_sqrt2.pkl
+    }
+} else {
+    if $nosteering {
+        set file tfgp_2019${date}_${kernel}_nosteering.pkl
+    } else {
+        set file tfgp_2019${date}_${kernel}.pkl
+    }
+}
+
+catch {exec rm anl_hyperparams.pkl}
+exec ln -s aps/$file anl_hyperparams.pkl
+
+exit 0

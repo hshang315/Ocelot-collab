@@ -1,0 +1,11 @@
+import pickle
+import sys
+
+if len(sys.argv)==2:
+    file=sys.argv[1]
+else:
+    file='anl_hyperparams.pkl'
+f=open(file,'rb')
+data=pickle.load(f)
+print(data)
+f.close()
